@@ -15,7 +15,7 @@ app.get('/about', (req, res) => {
 
 // Route 3: Contact Page
 app.get('/contact', (req, res) => {
-  res.send('Contact us at contact@example.com');
+  res.send('Contact us at contact@example.com always');
 });
 
 
