@@ -1,0 +1,40 @@
+name: CI/CD Pipeline
+
+# Trigger the pipeline whenever code is pushed or a pull request is made to the main branch
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  # Define a job to handle the backend (Node.js) part
+  backend:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Step 1: Check out the code from the GitHub repo
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js to the correct version
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'  # You can adjust the version
+
+      # Step 3: Install dependencies for the backend
+      - name: Install dependencies
+        run: |
+          cd backend
+          npm install
+
+      # Step 4: Run tests for the backend (if you have tests)
+      - name: Run backend tests
+        run: |
+          cd backend
+          npm test
+
+  
