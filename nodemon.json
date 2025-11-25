@@ -1,0 +1,6 @@
+{
+  "watch": ["server.js", "controllers", "data", "logger.js"],
+  "ext": "js,json",
+  "ignore": ["test/**/*", "node_modules"]
+}
+

@@ -1,29 +1,29 @@
 // server.js
 const express = require('express');
+const logger = require('./logger');
+const {
+  sendHome,
+  sendAbout,
+  sendContact,
+  listUsers,
+  getUserById,
+  listPosts,
+} = require('./controllers/demoController');
+
 const app = express();
-const port = 3000; // You can change the port as needed
+const port = process.env.PORT || 3000;
 
-// Route 1: Home Page
-app.get('/', (req, res) => {
-  res.send('Welcome to the Home Page!');
-});
+app.get('/', sendHome);
+app.get('/about', sendAbout);
+app.get('/contact', sendContact);
+app.get('/users', listUsers);
+app.get('/users/:id', getUserById);
+app.get('/posts', listPosts);
 
-// Route 2: About Page
-app.get('/about', (req, res) => {
-  res.send('This is the About Page!');
-});
-
-// Route 3: Contact Page
-app.get('/contact', (req, res) => {
-  res.send('Contact us at contact@example.com');
-});
-
-
-module.exports  = app;
-
+module.exports = app;
 
 if (require.main === module) {
   app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+    logger.info(`Server is running on http://localhost:${port}`);
   });
 }
