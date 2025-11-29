@@ -1,7 +1,7 @@
 // server.js
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
-const { graphqlHTTP } = require('express-graphql');
+const { createHandler } = require('graphql-http/lib/use/express');
 const logger = require('./logger');
 const swaggerDocument = require('./docs/swagger');
 const { schema, rootResolver } = require('./graphql/schema');
@@ -28,14 +28,10 @@ app.use(
   swaggerUi.setup(swaggerDocument, { explorer: true })
 );
 
-app.use(
-  '/graphql',
-  graphqlHTTP({
-    schema,
-    rootValue: rootResolver,
-    graphiql: true,
-  })
-);
+app.all('/graphql', createHandler({
+  schema,
+  rootValue: rootResolver,
+}));
 
 app.get('/', sendHome);
 app.get('/about', sendAbout);
