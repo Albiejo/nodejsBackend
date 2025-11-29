@@ -1,6 +1,10 @@
 // server.js
 const express = require('express');
+const swaggerUi = require('swagger-ui-express');
+const { graphqlHTTP } = require('express-graphql');
 const logger = require('./logger');
+const swaggerDocument = require('./docs/swagger');
+const { schema, rootResolver } = require('./graphql/schema');
 const {
   sendHome,
   sendAbout,
@@ -12,6 +16,26 @@ const {
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+//Telling app to use swagger UI on /docs route with metadata from swagger.js file 
+app.use(
+  '/docs',
+  (req, res, next) => {
+    logger.info('GET /docs - swagger UI accessed');
+    next();
+  },
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument, { explorer: true })
+);
+
+app.use(
+  '/graphql',
+  graphqlHTTP({
+    schema,
+    rootValue: rootResolver,
+    graphiql: true,
+  })
+);
 
 app.get('/', sendHome);
 app.get('/about', sendAbout);
